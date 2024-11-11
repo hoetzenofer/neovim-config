@@ -32,13 +32,13 @@ local plugins = {
     {"nvim-tree/nvim-web-devicons"},
     {"folke/noice.nvim", dependencies = {"MunifTanjim/nui.nvim", "rcarriga/nvim-notify"}},
     {"stevearc/oil.nvim"},
-    {"neovim/nvim-lspconfig"},      -- LSP Config für Python
-    {"hrsh7th/nvim-cmp"},           -- Completion-Plugin
-    {"hrsh7th/cmp-nvim-lsp"},       -- LSP-Completion-Quelle für nvim-cmp
-    {"hrsh7th/cmp-buffer"},         -- Buffer Completion-Quelle
-    {"hrsh7th/cmp-path"},           -- Datei-Completion-Quelle
-    {"saadparwaiz1/cmp_luasnip"},   -- Snippet-Completion
-    {"L3MON4D3/LuaSnip"},           -- Snippet-Engine
+    {"neovim/nvim-lspconfig"},      -- LSP config
+    {"hrsh7th/nvim-cmp"},           -- completion plugin
+    {"hrsh7th/cmp-nvim-lsp"},       -- LSP completion source for nvim-cmp
+    {"hrsh7th/cmp-buffer"},         -- buffer completion source
+    {"hrsh7th/cmp-path"},           -- file completion source
+    {"saadparwaiz1/cmp_luasnip"},   -- snippet completion
+    {"L3MON4D3/LuaSnip"},           -- snippet engine
     {"kyazdani42/nvim-tree.lua"},
     {"akinsho/bufferline.nvim"}
 }
@@ -69,7 +69,7 @@ require("nvim-tree").setup({
         local function opts(desc)
             return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
         end
-        -- Tastenbelegung für Enter/Öffnen in neuem Buffer (anstatt Tab)
+        -- keymap for opening in new buffer
         vim.keymap.set("n", "<CR>", api.node.open.edit, opts("Open: New Buffer"))
         vim.keymap.set("n", "o", api.node.open.edit, opts("Open: New Buffer"))
     end,
@@ -77,10 +77,10 @@ require("nvim-tree").setup({
 
 require("bufferline").setup({
     options = {
-        diagnostics = "nvim_lsp",  -- Zeigt LSP-Diagnosen in den Tabs an
+        diagnostics = "nvim_lsp",  -- LSP diagnose
         show_buffer_close_icons = true,
         show_close_icon = false,
-        separator_style = "thin",  -- Stil für die Trennlinie zwischen Tabs
+        separator_style = "thin",
     }
 })
 
@@ -97,21 +97,26 @@ local cmp = require'cmp'
 cmp.setup({
     snippet = {
         expand = function(args)
-            require'luasnip'.lsp_expand(args.body) -- LuaSnip als Snippet-Engine
+            require'luasnip'.lsp_expand(args.body)
         end,
     },
+
     mapping = {
         ['<Down>'] = cmp.mapping.select_next_item(),
         ['<Up>'] = cmp.mapping.select_prev_item(),
         ['<Tab>'] = cmp.mapping.confirm({ select = true }),
+
     },
-    sources = cmp.config.sources({
-        { name = 'nvim_lsp' },
-        { name = 'luasnip' },
-    }, {
-        { name = 'buffer' },
-        { name = 'path' }
-    })
+    sources = cmp.config.sources(
+        {
+            { name = 'nvim_lsp' },
+            { name = 'luasnip' },
+        },
+        {
+            { name = 'buffer' },
+            { name = 'path' }
+        }
+    )
 })
 
 local lspconfig = require'lspconfig'
@@ -127,4 +132,3 @@ lspconfig.clangd.setup{
 
 -- Plugin Configs
 vim.cmd.colorscheme("catppuccin")
-
