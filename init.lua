@@ -19,11 +19,6 @@ vim.api.nvim_set_keymap("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = 
 vim.api.nvim_create_autocmd("VimEnter", {
     callback = function()
         require("nvim-tree.api").tree.open()
-    end
-})
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
         vim.cmd("wincmd p")
     end
 })
@@ -130,11 +125,10 @@ cmp.setup({
 })
 
 local lspconfig = require'lspconfig'
+
 lspconfig.pyright.setup{
     capabilities = require('cmp_nvim_lsp').default_capabilities()
 }
-
-local lspconfig = require'lspconfig'
 
 lspconfig.clangd.setup{
     capabilities = require('cmp_nvim_lsp').default_capabilities()
