@@ -9,6 +9,25 @@ vim.cmd("set shiftwidth=4")
 
 vim.wo.number = true
 
+-- Keymaps
+vim.api.nvim_set_keymap("n", "<Leader>e", ":wincmd p<CR>", { noremap = true, silent = true })
+
+vim.api.nvim_set_keymap("n", "<Tab>", ":BufferLineCycleNext<CR>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = true, silent = true })
+
+-- Autocommands
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        require("nvim-tree.api").tree.open()
+    end
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+    callback = function()
+        vim.cmd("wincmd p")
+    end
+})
+
 -- Lazy Setup
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 
@@ -82,15 +101,6 @@ require("bufferline").setup({
         show_close_icon = false,
         separator_style = "thin",
     }
-})
-
-vim.api.nvim_set_keymap("n", "<Tab>", ":BufferLineCycleNext<CR>", { noremap = true, silent = true })
-vim.api.nvim_set_keymap("n", "<S-Tab>", ":BufferLineCyclePrev<CR>", { noremap = true, silent = true })
-
-vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-        require("nvim-tree.api").tree.open()
-    end
 })
 
 local cmp = require'cmp'
